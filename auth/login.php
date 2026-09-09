@@ -3,6 +3,12 @@
 
     require_once "../config/database.php";
 
+    $rememberedUsername = "";
+    
+    if (isset($_COOKIE["username"])) {
+        $rememberedUsername = $_COOKIE["username"];
+    }
+
     $error = "";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -35,6 +41,13 @@
                             time()+ (86400 * 30),
                             "/"
                         );
+                    } else {
+                        setcookie(
+                            "username",
+                            "",
+                            time()-3600,
+                            "/"
+                        );
                     }
 
                     header("Location: ../dashboard.php");
@@ -60,7 +73,10 @@
         <h2>Login</h2>
         <form action="login.php" method="POST">
             <label>Username: </label>
-            <input type="text" name="username">
+            <input
+            type="text"
+            name="username"
+            value = "<?php echo htmlspecialchars($rememberedUsername); ?>">
 
             <br><br>
 
