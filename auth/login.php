@@ -65,7 +65,7 @@
     }
 ?>
 
-<html>
+<!DOCTYPE html>
     <head>
         <title>Login</title>
     </head>
