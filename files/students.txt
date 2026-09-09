@@ -1,0 +1,20 @@
+Roll Number: 1
+Name: John
+Department: CS
+Semester: 3
+Email: john@email.com
+Marks: 70, 85, 90
+Total: 245
+Average: 81.67
+Grade: A
+----------------------------------------
+Roll Number: 2
+Name: Alice
+Department: IT
+Semester: 5
+Email: alice@email.com
+Marks: 85, 92, 76
+Total: 253
+Average: 84.33
+Grade: A
+----------------------------------------
