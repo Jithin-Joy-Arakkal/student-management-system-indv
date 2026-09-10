@@ -9,14 +9,12 @@ if (!isset($_SESSION["admin_id"])) {
 
 require_once "../config/database.php";
 
-// Check whether student ID is provided
 if (!isset($_GET["id"])) {
     die("Student ID not provided.");
 }
 
 $id = $_GET["id"];
 
-// Delete student
 $sql = "DELETE FROM students WHERE id = ?";
 
 $stmt = $conn->prepare($sql);
