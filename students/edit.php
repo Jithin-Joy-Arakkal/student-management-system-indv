@@ -102,23 +102,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 } else {
 
-    $sql = "SELECT * FROM students WHERE id = ?";
+    try {
 
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
+        $sql = "SELECT * FROM students WHERE id = ?";
 
-    $result = $stmt->get_result();
+        $stmt = $conn->prepare($sql);
 
-    if ($result->num_rows == 1) {
+        if (!$stmt) {
+            throw new Exception("Failed to prepare SQL statement.");
+        }
 
-        $student = $result->fetch_assoc();
+        $stmt->bind_param("i", $id);
 
-    } else {
-        die("Student not found.");
+        if (!$stmt->execute()) {
+            throw new Exception("Failed to retrieve student details.");
+        }
+
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 1) {
+            $student = $result->fetch_assoc();
+        } else {
+            throw new Exception("Student not found.");
+        }
+
+        $stmt->close();
+
+    } catch (Exception $e) {
+
+        $error = $e->getMessage();
+
     }
-
-    $stmt->close();
 }
 
 ?>
