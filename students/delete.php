@@ -9,24 +9,37 @@ if (!isset($_SESSION["admin_id"])) {
 
 require_once "../config/database.php";
 
-if (!isset($_GET["id"])) {
-    die("Student ID not provided.");
-}
+try {
 
-$id = $_GET["id"];
+    if (!isset($_GET["id"])) {
+        throw new Exception("Student ID not provided.");
+    }
 
-$sql = "DELETE FROM students WHERE id = ?";
+    $id = $_GET["id"];
 
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id);
+    $sql = "DELETE FROM students WHERE id = ?";
 
-if ($stmt->execute()) {
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        throw new Exception("Failed to prepare SQL statement.");
+    }
+
+    $stmt->bind_param("i", $id);
+
+    if (!$stmt->execute()) {
+        throw new Exception("Failed to delete student.");
+    }
+
+    $stmt->close();
+
     header("Location: view.php");
     exit();
-} else {
-    echo "Failed to delete student.";
-}
 
-$stmt->close();
+} catch (Exception $e) {
+
+    echo "Error: " . htmlspecialchars($e->getMessage());
+
+}
 
 ?>
