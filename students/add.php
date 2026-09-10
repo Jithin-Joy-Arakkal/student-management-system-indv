@@ -135,7 +135,8 @@
         <title>Add Student</title>
     </head>
     <body>
-        <h2>Add student</h2>
+        <h1>Add student</h1>
+        <a href="view.php">Back to Students</a>
         <form action="add.php" method="POST">
             <label>Roll No: </label>
             <input
