@@ -36,6 +36,7 @@
                 }
             } 
         }
+        
         if (empty($error)) {
             $sql = "SELECT id FROM students WHERE roll_no = ?";
 
@@ -80,52 +81,58 @@
             $total = calculateTotal($marks);
             $average = calculateAverage($marks);
             $grade = calculateGrade($average);
+            try{
+                $sql = "INSERT INTO students
+                        (roll_no, name, department, semester, email, marks1, marks2, marks3)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                if (!$stmt) {
+                    throw new Exception("Failed to prepare SQL statement.");
+                }
+                $stmt->bind_param(
+                    "sssisiii",
+                    $roll_no,
+                    $std_name,
+                    $dept,
+                    $sem,
+                    $email,
+                    $marks1,
+                    $marks2,
+                    $marks3
+                );
 
-            $sql = "INSERT INTO students
-                    (roll_no, name, department, semester, email, marks1, marks2, marks3)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param(
-                "sssisiii",
-                $roll_no,
-                $std_name,
-                $dept,
-                $sem,
-                $email,
-                $marks1,
-                $marks2,
-                $marks3
-            );
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to add student to database.");
+                }
+                if ($stmt->execute()) {
+                    $file = "../files/students.txt";
 
-            if ($stmt->execute()) {
-                $file = "../files/students.txt";
+                    $data = "Roll Number: " . $roll_no . "\n";
+                    $data .= "Name: " . $std_name . "\n";
+                    $data .= "Department: " . $dept . "\n";
+                    $data .= "Semester: " . $sem . "\n";
+                    $data .= "Email: " . $email . "\n";
+                    $data .= "Marks: " . implode(", ", $marks) . "\n";
+                    $data .= "Total: " . $total . "\n";
+                    $data .= "Average: " . number_format($average, 2) . "\n";
+                    $data .= "Grade: " . $grade . "\n";
+                    $data .= "----------------------------------------\n";
 
-                $data = "Roll Number: " . $roll_no . "\n";
-                $data .= "Name: " . $std_name . "\n";
-                $data .= "Department: " . $dept . "\n";
-                $data .= "Semester: " . $sem . "\n";
-                $data .= "Email: " . $email . "\n";
-                $data .= "Marks: " . implode(", ", $marks) . "\n";
-                $data .= "Total: " . $total . "\n";
-                $data .= "Average: " . number_format($average, 2) . "\n";
-                $data .= "Grade: " . $grade . "\n";
-                $data .= "----------------------------------------\n";
-
-                if (file_put_contents($file, $data, FILE_APPEND) !== false) {
+                    if (file_put_contents($file, $data, FILE_APPEND) === false) {
+                        throw new Exception("Failed to write student details to file.");
+                    }
 
                     $success = "Student added successfully.";
 
                 } else {
 
-                    $error = "Student was added to database, but writing to file failed.";
+                    throw new Exception("Failed to add student to database.");
                 }
 
-            } else {
-
-                $error = "Failed to add student to database.";
+                $stmt->close();
+            } catch (Exception $e) {
+                $error = $e->getMessage();
             }
-
-            $stmt->close();
         }
     }
 ?>
