@@ -12,6 +12,7 @@ A small PHP and MySQL application for managing student records through an admini
 - Automatic calculation of total marks, average marks, and grade.
 - Duplicate roll-number detection.
 - Export of newly added student details to `files/students.txt`.
+- Automatic text-file synchronization after student edits and deletes.
 - In-browser viewing and downloading of the text-file records.
 - Prepared SQL statements for login, inserts, and duplicate checks.
 - HTML escaping when user-provided values are displayed.
@@ -120,7 +121,8 @@ VALUES ('admin', 'PASTE_THE_GENERATED_HASH_HERE');
 3. Protected pages check for the session before showing dashboard or student data.
 4. The add form validates required fields, semester range, email format, marks range, and roll-number uniqueness.
 5. A valid student is inserted into MySQL. The same record's calculated results are appended to `files/students.txt`.
-6. The view page calculates and displays totals, averages, and grades from the stored marks.
+6. When a student is edited or deleted, the text file is rebuilt from the current MySQL records so it stays synchronized with the database.
+7. The view page calculates and displays totals, averages, and grades from the stored marks.
 
 ### Grade Scale
 
@@ -172,7 +174,8 @@ student-management-system-indv/
 
 ## Notes
 
-- The database and text file are two separate data stores. Editing or deleting a database record does not rewrite older entries already appended to `files/students.txt`.
+- MySQL is the primary student-record store. The text file is a synchronized, human-readable export that is regenerated after edits and deletes.
+- If all student records are deleted, `files/students.txt` is rewritten as an empty file and the read-file page reports that no records are available.
 - Update the default database credentials before deploying outside a local XAMPP environment.
 - Use HTTPS and a proper secrets-management approach for production deployments.
 - The application is intended as a simple educational CRUD project and should receive additional hardening before public deployment, including CSRF protection, stricter authorization, and production error handling.
