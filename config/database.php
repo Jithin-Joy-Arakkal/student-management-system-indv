@@ -1,14 +1,29 @@
 <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "student_management";
 
-    $conn = new mysqli($servername, $username, $password, $dbname);
+$host = "localhost";
+$username = "root";
+$password = "";
+$db = "student_management";
 
-    if ($conn->connect_error){
-        die("Connection failed: " . $conn->connect_error);
+try {
+
+    $conn = new mysqli(
+        $host,
+        $username,
+        $password,
+        $db
+    );
+
+    if ($conn->connect_error) {
+        throw new Exception(
+            "Database connection failed."
+        );
     }
 
-    echo "Connected successfully to MySQL database!";
+} catch (Exception $e) {
+
+    echo "Error: " . $e->getMessage();
+
+}
+
 ?>

@@ -137,6 +137,8 @@
     <body>
         <h1>Add student</h1>
         <a href="../dashboard.php">Back to Dashboard</a>
+        <br><br>
+        
         <form action="add.php" method="POST">
             <label>Roll No: </label>
             <input
