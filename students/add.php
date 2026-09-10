@@ -2,7 +2,7 @@
     session_start();
 
     if (!isset($_SESSION["admin_id"])) {
-        header("Location: auth/login.php");
+        header("Location: ../auth/login.php");
         exit();
     }
 
@@ -104,30 +104,25 @@
                 if (!$stmt->execute()) {
                     throw new Exception("Failed to add student to database.");
                 }
-                if ($stmt->execute()) {
-                    $file = "../files/students.txt";
 
-                    $data = "Roll Number: " . $roll_no . "\n";
-                    $data .= "Name: " . $std_name . "\n";
-                    $data .= "Department: " . $dept . "\n";
-                    $data .= "Semester: " . $sem . "\n";
-                    $data .= "Email: " . $email . "\n";
-                    $data .= "Marks: " . implode(", ", $marks) . "\n";
-                    $data .= "Total: " . $total . "\n";
-                    $data .= "Average: " . number_format($average, 2) . "\n";
-                    $data .= "Grade: " . $grade . "\n";
-                    $data .= "----------------------------------------\n";
+                $file = "../files/students.txt";
 
-                    if (file_put_contents($file, $data, FILE_APPEND) === false) {
-                        throw new Exception("Failed to write student details to file.");
-                    }
+                $data = "Roll Number: " . $roll_no . "\n";
+                $data .= "Name: " . $std_name . "\n";
+                $data .= "Department: " . $dept . "\n";
+                $data .= "Semester: " . $sem . "\n";
+                $data .= "Email: " . $email . "\n";
+                $data .= "Marks: " . implode(", ", $marks) . "\n";
+                $data .= "Total: " . $total . "\n";
+                $data .= "Average: " . number_format($average, 2) . "\n";
+                $data .= "Grade: " . $grade . "\n";
+                $data .= "----------------------------------------\n";
 
-                    $success = "Student added successfully.";
-
-                } else {
-
-                    throw new Exception("Failed to add student to database.");
+                if (file_put_contents($file, $data, FILE_APPEND) === false) {
+                    throw new Exception("Failed to write student details to file.");
                 }
+
+                $success = "Student added successfully.";
 
                 $stmt->close();
             } catch (Exception $e) {
@@ -230,5 +225,5 @@
         <?php if (!empty($success)): ?>
             <p><?php echo htmlspecialchars($success); ?></p>
         <?php endif; ?>
-    <body>
+    </body>
 </html>

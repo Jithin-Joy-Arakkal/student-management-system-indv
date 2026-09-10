@@ -28,3 +28,13 @@ Total: 175
 Average: 58.33
 Grade: D
 ----------------------------------------
+Roll Number: 3
+Name: Bob
+Department: IT
+Semester: 4
+Email: jithin@email.com
+Marks: 32, 34, 34
+Total: 100
+Average: 33.33
+Grade: F
+----------------------------------------

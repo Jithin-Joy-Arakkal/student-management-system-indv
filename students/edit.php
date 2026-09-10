@@ -86,9 +86,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param(
                 "sssisiiii",
                 $roll_no,
-                $std_name,
-                $dept,
-                $sem,
+                $name,
+                $department,
+                $semester,
                 $email,
                 $marks1,
                 $marks2,
