@@ -18,3 +18,13 @@ Total: 253
 Average: 84.33
 Grade: A
 ----------------------------------------
+Roll Number: 3
+Name: Bob
+Department: CS
+Semester: 5
+Email: bob@email.com
+Marks: 75, 62, 38
+Total: 175
+Average: 58.33
+Grade: D
+----------------------------------------
