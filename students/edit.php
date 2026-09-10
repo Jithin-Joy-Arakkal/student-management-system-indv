@@ -65,39 +65,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($error)) {
 
-        $sql = "UPDATE students
-                SET roll_no = ?,
-                    name = ?,
-                    department = ?,
-                    semester = ?,
-                    email = ?,
-                    marks1 = ?,
-                    marks2 = ?,
-                    marks3 = ?
-                WHERE id = ?";
+        try {
+            $sql = "UPDATE students
+                    SET roll_no = ?,
+                        name = ?,
+                        department = ?,
+                        semester = ?,
+                        email = ?,
+                        marks1 = ?,
+                        marks2 = ?,
+                        marks3 = ?
+                    WHERE id = ?";
 
-        $stmt = $conn->prepare($sql);
+            $stmt = $conn->prepare($sql);
 
-        $stmt->bind_param(
-            "sssisiiii",
-            $roll_no,
-            $name,
-            $department,
-            $semester,
-            $email,
-            $marks1,
-            $marks2,
-            $marks3,
-            $id
-        );
+            if (!$stmt) {
+                throw new Exception("Failed to prepare SQL statement.");
+            }
 
-        if ($stmt->execute()) {
+            $stmt->bind_param(
+                "sssisiiii",
+                $roll_no,
+                $std_name,
+                $dept,
+                $sem,
+                $email,
+                $marks1,
+                $marks2,
+                $marks3,
+                $id
+            );
+
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to update student details.");
+            }
+
+            $stmt->close();
+
             $success = "Student details updated successfully.";
-        } else {
-            $error = "Failed to update student details.";
-        }
 
-        $stmt->close();
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
     }
 
 } else {
